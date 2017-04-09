@@ -76,7 +76,7 @@ public class OplatyController implements Serializable {
         lista.add("Październik");
         lista.add("Listopad");
         lista.add("Grudzień");
-        for (int i=data.getMonth();i<12;i++)lista2.add(lista.get(i));
+        for (int i=data.getMonth()+1;i<12;i++)lista2.add(lista.get(i));
         return lista2;
     }
     public Integer zamienMiesiac(String miesiac){
@@ -97,23 +97,24 @@ public class OplatyController implements Serializable {
         }
         return wynik;
     }
-    public void automat(List<Mieszkanie> mieszkania,Stawki stawki,Integer miesiac,Integer rok){
+    public void automat(List<Mieszkanie> mieszkania,Integer miesiac,Integer rok){
     //double sumaoplat= 0.0;
     double sumaoplat=0.0;
 
     String sumaoplat2;
     Integer pomoc =0;
     Oplaty oplata2 = new Oplaty();
-    
+    Stawki stawki= new Stawki();
     List<Oplaty> lista = new ArrayList<Oplaty>();
     Mieszkanie mieszkanie = new Mieszkanie();
     for (int i=0;i<mieszkania.size();i++){
     mieszkanie=mieszkania.get(i);
+    stawki=getFacade().zwroc(mieszkanie.getIdBudynku());
     oplata2=getFacade().sprawdz(miesiac, rok,mieszkanie);
     sumaoplat=stawki.getEksploatacjaPodstawowa()*mieszkanie.getPowierzchnia();
     sumaoplat+= stawki.getFunduszRemontowy()*mieszkanie.getPowierzchnia()+stawki.getLegalizacjaWodomierza()*2;
     sumaoplat+= stawki.getKonserwacjaDomofonu();
-    sumaoplat+= stawki.getEksploatacjaDzwigow()*mieszkanie.getLiczbaOsob()*(mieszkanie.getPietro()*0.1f);
+    sumaoplat+= stawki.getEksploatacjaDzwigow()*mieszkanie.getLiczbaOsob()*(mieszkanie.getPietro());
     sumaoplat+= stawki.getCo()*mieszkanie.getLicznikCiepla();
     sumaoplat+= stawki.getCw()*mieszkanie.getLicznikWodyCieplej();
     sumaoplat+= stawki.getZwis()*mieszkanie.getLicznikWodyZimnej();
@@ -122,7 +123,7 @@ public class OplatyController implements Serializable {
     sumaoplat+= stawki.getSmieci();
     sumaoplat+= stawki.getUbezpieczenie();
     pomoc=(int)(sumaoplat*100);
-    sumaoplat=(pomoc*0.01);
+    sumaoplat=(float)(pomoc*0.01);
 
     if(oplata2==null){
     Oplaty oplata = new Oplaty();
@@ -161,7 +162,7 @@ public class OplatyController implements Serializable {
         zmienna1=(float)(zmienna2*0.01);
         oplaty.setPodsumowanie(zmienna1);
         selected=oplaty;
-        persist(PersistAction.UPDATE, "Pole Zapłacono dla ");
+        persist(PersistAction.UPDATE, "Pole Zapłacono dla mieszkania " + selected.getIdMieszkania().getId() + " zaktualizowano");
         }
     }
     public void create() {

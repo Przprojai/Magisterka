@@ -21,7 +21,7 @@
                         <p:outputLabel value="#{bundle.CreateOplatyLabel_rok}" for="rok" />
                          <p:inputText id="rok" value="#{Integer2}" title="#{bundle.CreateOplatyTitle_rok}" required="true" requiredMessage="#{bundle.CreateOplatyRequiredMessage_rok}"/>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{oplatyController.automat(mieszkanieController.lista_mieszkan(),stawkiController.items.get(0),oplatyController.zamienMiesiac(String),Integer2)}" value="#{bundle.Save}" update="display,:OplatyListForm:datalist,:growl" oncomplete="handleSubmit(args,'OplatyCreateDialog2');"/>
+                    <p:commandButton actionListener="#{oplatyController.automat(mieszkanieController.lista_mieszkan(),oplatyController.zamienMiesiac(String),Integer2)}" value="#{bundle.Save}" update="display,:OplatyListForm:datalist,:growl" oncomplete="handleSubmit(args,'OplatyCreateDialog2');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="OplatyCreateDialog2.hide()"/>
                 </h:panelGroup>
             </h:form>
